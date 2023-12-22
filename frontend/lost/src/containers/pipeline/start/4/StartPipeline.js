@@ -3,10 +3,9 @@ import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from 'reactstrap'
 import { alertLoading, alertClose, alertError } from '../../globalComponents/Sweetalert'
-import { connect } from 'react-redux'
 import * as pipelineApi from '../../../../actions/pipeline/pipeline_api'
 
-const StartPipeline = ({ step0Data, step1Data, step2Data }) => {
+const StartPipeline = ({ step0Data, step1Data, pipelineName, pipelineDescription }) => {
     const { data: postPipelineResponse, mutate: postPipeline } = pipelineApi.useCreateAndStartPipeline()
 
     useEffect(() => {
@@ -28,8 +27,8 @@ const StartPipeline = ({ step0Data, step1Data, step2Data }) => {
 
     const startPipe = () => {
         const json = {
-            name: step2Data.name,
-            description: step2Data.description,
+            name: pipelineName,
+            description: pipelineDescription,
             elements: step1Data.elements.map((el) => {
                 if ('loop' in el.exportData) {
                     if (el.exportData.loop.maxIteration === -1) {
@@ -57,13 +56,4 @@ const StartPipeline = ({ step0Data, step1Data, step2Data }) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        step0Data: state.pipelineStart.step0Data,
-        step1Data: state.pipelineStart.step1Data,
-        step2Data: state.pipelineStart.step2Data,
-        step3Data: state.pipelineStart.step3Data,
-    }
-}
-
-export default connect(mapStateToProps)(StartPipeline)
+export default StartPipeline
